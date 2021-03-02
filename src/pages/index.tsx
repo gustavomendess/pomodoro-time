@@ -1,14 +1,30 @@
-import Head from 'next/head'
+import { CompletedChallenges } from '../components/CompletedChallenges'
+import { CountDown } from '../components/CountDown'
 import { ExperienceBar } from '../components/ExperienceBar'
+import { Profile } from '../components/Profile'
+
+import Head from 'next/head'
+
+import styles from '../styles/pages/Home.module.css'
 
 function App() {
   return (
-    <div className="container">
+    <div className={styles.container}>
       <Head>
-        <link rel="preconnect" href="https://fonts.gstatic.com"/>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Rajdhani:wght@600&display=swap" rel="stylesheet"/>
+        <title>Inicio | PomodoroTime</title>
       </Head>
       <ExperienceBar />
+
+      <section>
+        <div>
+          <Profile />
+          <CompletedChallenges />
+          <CountDown />
+        </div>
+        <div>
+
+        </div>
+      </section>
     </div>
   );
 }
