@@ -7,6 +7,7 @@ import Head from 'next/head'
 
 import styles from '../styles/pages/Home.module.css'
 import { ChallengeBox } from '../components/ChallengeBox'
+import { CountdownProvider } from '../contexts/CountdownContext'
 
 function App() {
   return (
@@ -15,17 +16,18 @@ function App() {
         <title>Inicio | PomodoroTime</title>
       </Head>
       <ExperienceBar />
-
-      <section>
-        <div>
-          <Profile />
-          <CompletedChallenges />
-          <CountDown />
-        </div>
-        <div>
-          <ChallengeBox/>
-        </div>
-      </section>
+      <CountdownProvider>
+        <section>
+          <div>
+            <Profile />
+            <CompletedChallenges />
+            <CountDown />
+          </div>
+          <div>
+            <ChallengeBox/>
+          </div>
+        </section>
+      </CountdownProvider>
     </div>
   );
 }
