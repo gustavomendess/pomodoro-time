@@ -1,24 +1,24 @@
-import { CompletedChallenges } from '../components/CompletedChallenges'
-import { CountDown } from '../components/CountDown'
-import { ExperienceBar } from '../components/ExperienceBar'
-import { Profile } from '../components/Profile'
+import Head from 'next/head'
 import { GetServerSideProps } from 'next'
 
-import Head from 'next/head'
+import { CompletedChallenges } from '../components/CompletedChallenges'
+import { ChallengeBox } from '../components/ChallengeBox'
+import { Countdown } from '../components/Countdown'
+import { Profile } from '../components/Profile'
 
 import styles from '../styles/pages/Home.module.css'
-import { ChallengeBox } from '../components/ChallengeBox'
 import { CountdownProvider } from '../contexts/CountdownContext'
 import { ChallengesProvider } from '../contexts/ChallengesContext'
 
 interface HomeProps {
-  level : number;
-  currentExperience : number;
-  challengesCompleted : number;
+  level: number;
+  currentExperience: number;
+  challengesCompleted: number;
 }
 
 
 export default function Home(props: HomeProps) {
+  console.log(props)
 
   return (
     <ChallengesProvider
@@ -30,13 +30,12 @@ export default function Home(props: HomeProps) {
         <Head>
           <title>Inicio | PomodoroTime</title>
         </Head>
-        <ExperienceBar />
         <CountdownProvider>
           <section>
             <div>
               <Profile />
               <CompletedChallenges />
-              <CountDown />
+              <Countdown />
             </div>
             <div>
               <ChallengeBox/>

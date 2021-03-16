@@ -5,7 +5,7 @@ import styles from '../styles/components/Countdown.module.css'
 
 let countdownTimeout: NodeJS.Timeout;
 
-export function CountDown() {
+export function Countdown() {
   const {
     minutes,
     seconds,
