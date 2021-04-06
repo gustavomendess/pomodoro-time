@@ -1,6 +1,7 @@
 import { create } from 'domain';
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { ChallengesContext } from './ChallengesContext';
+import { CompletedChallengesModal } from '../components/CompletedChallengesModal';
 
 interface CountdownContextData {
   minutes: number;
@@ -9,6 +10,8 @@ interface CountdownContextData {
   isActive: boolean;
   startCountdown: () => void;
   resetCountdown: () => void;
+  closeModal: () => void;
+  openModal: () => void;
 }
 
 interface CountdownProviderProps {
@@ -18,12 +21,18 @@ interface CountdownProviderProps {
 export const CountdownContext = createContext({} as CountdownContextData)
 
 let countdownTimeout: NodeJS.Timeout;
+let count = 0;
 
 export function CountdownProvider({children}: CountdownProviderProps) {
   const { startNewChallenge } = useContext(ChallengesContext);
 
-  const twentyFiveMinutes = (0.05 * 60);
+  const [isModalOpen, setModalOpen] = useState(false)
 
+  const twentyFiveMinutes = (25 * 60);
+
+  const fiveMinutes = (5 * 60);
+
+  const [isActiveTimeRest, setActiveTimeRest] = useState(false)
   const [time, setTime] = useState(twentyFiveMinutes);
   const [isActive, setIsActive] = useState(false);
   const [hasFinished, setHasFinished] = useState(false);
@@ -31,7 +40,23 @@ export function CountdownProvider({children}: CountdownProviderProps) {
   const minutes = Math.floor(time / 60);
   const seconds = time % 60;
 
+  function closeModal() {
+    setModalOpen(false)
+  }
+
+  function openModal() {
+    setModalOpen(true)
+      setTimeout(function() {
+        setModalOpen(false)
+      }, 30000);
+  }
+
   function resetCountdown() {
+    count ++;
+    if (count === 4) {
+      openModal()
+      count = 0;
+    }
     clearTimeout(countdownTimeout);
     setIsActive(false)
     setTime(twentyFiveMinutes);
@@ -43,6 +68,17 @@ export function CountdownProvider({children}: CountdownProviderProps) {
   }
 
   useEffect(() => {
+    if (isActiveTimeRest && time > 0) {
+      countdownTimeout = setTimeout(() => {
+        setTime(time - 1)
+      }, 1000)
+    } else if (isActiveTimeRest && time === 0) {
+      setActiveTimeRest(false)
+      resetCountdown()
+    }
+  }, [isActiveTimeRest, time])
+
+  useEffect(() => {
     if (isActive && time > 0) {
       countdownTimeout = setTimeout(() => {
         setTime(time - 1)
@@ -51,6 +87,8 @@ export function CountdownProvider({children}: CountdownProviderProps) {
       setHasFinished(true)
       setIsActive(false)
       startNewChallenge();
+      setTime(fiveMinutes);
+      setActiveTimeRest(true);
     }
   }, [isActive, time])
 
@@ -64,6 +102,7 @@ export function CountdownProvider({children}: CountdownProviderProps) {
       resetCountdown
     }}>
       {children}
+      { isModalOpen && <CompletedChallengesModal />}
     </CountdownContext.Provider>
   )
 }

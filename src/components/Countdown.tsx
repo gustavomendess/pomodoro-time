@@ -36,7 +36,7 @@ export function Countdown() {
           disabled
           className={styles.countdownButton}
         >
-          Ciclo encerrado
+          Ciclo encerrado, agora descanse até o tempo acabar!
         </button>
       ) : (
         <>

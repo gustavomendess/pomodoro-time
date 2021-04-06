@@ -1,4 +1,4 @@
-import { createContext, useState, ReactNode, useEffect } from 'react';
+import React, { createContext, useState, useEffect, Children, ReactNode, useContext } from 'react';
 import Cookies from 'js.cookie';
 import challenges from '../../challenges.json';
 import { CompletedChallengesModal } from '../components/CompletedChallengesModal';
@@ -15,7 +15,6 @@ interface ChallengesContextData {
   startNewChallenge: () => void;
   resetChallenge: () => void;
   completeChallenge: () => void;
-  closeModal: () => void;
 }
 
 interface ChallengesProviderProps {
@@ -31,10 +30,8 @@ export function ChallengesProvider({
   ...rest
 }: ChallengesProviderProps) {
   const [challengesCompleted, setChallengesCompleted] = useState(rest.challengesCompleted ?? 0);
-  const [isModalOpen, setModalOpen] = useState(false)
 
   const [activeChallenge, setActiveChallenge] = useState(null);
-
 
   useEffect(() => {
     Notification.requestPermission();
@@ -43,11 +40,6 @@ export function ChallengesProvider({
   useEffect(() => {
     Cookies.set('challengesCompleted', String(challengesCompleted));
   }, [challengesCompleted])
-
-  function closeModal() {
-    setModalOpen(false)
-  }
-
 
   function startNewChallenge() {
     const randomChallengeIndex = Math.floor(Math.random() * challenges.length)
@@ -59,7 +51,7 @@ export function ChallengesProvider({
 
     if (Notification.permission === 'granted') {
       new Notification('Novo desafio 🎉', {
-        body: `Valendo ${challenge.amount}XP!`,
+        body: `Descanse e se possível cumpra o desafio que irá te ajudar nesse longo dia!!!`,
       });
     }
   }
@@ -75,11 +67,6 @@ export function ChallengesProvider({
 
     setActiveChallenge(null)
     setChallengesCompleted(challengesCompleted + 1)
-    setModalOpen(true)
-    setTimeout(function() {
-      setModalOpen(false)
-    }, 2000);
-
   }
 
   return (
@@ -90,11 +77,9 @@ export function ChallengesProvider({
         activeChallenge,
         resetChallenge,
         completeChallenge,
-        closeModal
       }}
     >
       {children}
-      { isModalOpen && <CompletedChallengesModal />}
     </ChallengesContext.Provider>
     )
 }
