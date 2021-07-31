@@ -48,7 +48,8 @@ export function CountdownProvider({children}: CountdownProviderProps) {
     setModalOpen(true)
       setTimeout(function() {
         setModalOpen(false)
-      }, 30000);
+        new Audio('/notification.mp3').play();
+      }, 300000);
   }
 
   function resetCountdown() {
@@ -99,7 +100,9 @@ export function CountdownProvider({children}: CountdownProviderProps) {
       hasFinished,
       isActive,
       startCountdown,
-      resetCountdown
+      resetCountdown,
+      openModal,
+      closeModal
     }}>
       {children}
       { isModalOpen && <CompletedChallengesModal />}

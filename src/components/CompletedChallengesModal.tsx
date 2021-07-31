@@ -10,7 +10,7 @@ const { closeModal } = useContext(CountdownContext)
 
     <div className={styles.overlay}>
       <div className={styles.container}>
-      <header>{challengesCompleted}</header>
+      <header>0</header>
         <strong>Parabéns</strong>
         <p>Você completou um ciclo completo de pomodoro, descanse 30 minutos e volte com todo gás!!!</p>
 
